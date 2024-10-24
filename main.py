@@ -39,15 +39,32 @@ class MainWindow(QtWidgets.QMainWindow):
         # Label to show edge probability
         self.slider_label = QtWidgets.QLabel(f"Edge Probability: {self.edge_slider.value()}%", self)
 
-        # Create a layout to hold the spin box, slider, and canvas
-        self.layout_widget = QtWidgets.QWidget(self)
-        self.layout = QtWidgets.QVBoxLayout(self.layout_widget)
-        self.layout.addWidget(self.spin_box)
-        self.layout.addWidget(self.slider_label)
-        self.layout.addWidget(self.edge_slider)
-        self.layout.addWidget(self.canvas)
+        # Create layouts
+        self.main_layout = QtWidgets.QWidget(self)
+        self.main_horizontal_layout = QtWidgets.QHBoxLayout(self.main_layout)
 
-        self.setCentralWidget(self.layout_widget)
+        # Left layout for the graph (75% of the window width)
+        self.left_layout_widget = QtWidgets.QWidget(self)
+        self.left_layout = QtWidgets.QVBoxLayout(self.left_layout_widget)
+        self.left_layout.addWidget(self.canvas)
+
+        # Right layout for the widgets (25% of the window width)
+        self.right_layout_widget = QtWidgets.QWidget(self)
+        self.right_layout = QtWidgets.QVBoxLayout(self.right_layout_widget)
+        self.right_layout.addWidget(self.spin_box)
+        self.right_layout.addWidget(self.slider_label)
+        self.right_layout.addWidget(self.edge_slider)
+
+        # Add the left and right widgets to the main layout
+        self.main_horizontal_layout.addWidget(self.left_layout_widget)
+        self.main_horizontal_layout.addWidget(self.right_layout_widget)
+
+        # Set the stretch factors for the layout (75% for graph, 25% for controls)
+        self.main_horizontal_layout.setStretch(0, 3)  # 75% width for the graph
+        self.main_horizontal_layout.setStretch(1, 1)  # 25% width for the controls
+
+        # Set the main widget and layout
+        self.setCentralWidget(self.main_layout)
 
         # Initialize the graph and node positions
         self.graph = nx.Graph()
